@@ -1,0 +1,39 @@
+nav.primary{
+  display: table;
+  margin: 0 auto;
+}
+
+nav.primary ul, nav.primary ul li {
+  margin: 0px;
+}
+
+nav.primary select {
+  display: none;
+  width:  100%;
+  height: 28px;
+  margin: 21px 0;
+}
+
+nav.primary ul li {
+  display: inline;
+/*  float: left; */
+  position: relative;
+}
+
+nav.primary ul li a {
+  display: inline-block;
+  line-height: 2;
+  padding:  0 14px;
+  color: #111;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-weight: bold;
+  letter-spacing: 0.08em;
+  background: ##999999;
+}
+
+nav.primary ul li a:hover {
+  background: #2ecc71;
+  color: white;
+  cursor: pointer;
+}
