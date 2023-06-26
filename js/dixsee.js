@@ -3,6 +3,7 @@
 
 window.mode = 'daily';
 $("#subtitle_and_toggle_infinite").hide();
+$('#button_copy').hide();
 alphabet_set = new Set('abcdefghijklmnopqrstuvwxyz')
 
 toggle_mode = () => {
@@ -18,9 +19,6 @@ toggle_mode = () => {
 	$('#button_hint').prop('disabled', false);
 
 	$('#score').text('');
-
-
-	$('#button_copy').hide();
     }
     else {
 	// window.mode == 'infinite'
