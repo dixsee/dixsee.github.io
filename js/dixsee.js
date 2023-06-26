@@ -1,25 +1,55 @@
+window.mode = 'daily';
 alphabet_set = new Set('abcdefghijklmnopqrstuvwxyz')
 
-function show_about_splash() {
+toggle_mode = () => {
+    if (window.mode == 'daily') {
+	// change to infinite mode:
+	window.mode = 'infinite';
+
+	$("#subtitle_and_toggle_daily").hide();
+	$("#subtitle_and_toggle_infinite").show();
+
+	$('#guess').prop('disabled', false);
+	$('#button_submit').prop('disabled', false);
+	$('#button_hint').prop('disabled', false);
+
+	$('#score').text('');
+	
+    }
+    else {
+	// window.mode == 'infinite'
+
+	window.mode = 'daily';
+
+	$("#subtitle_and_toggle_infinite").hide();
+	$("#subtitle_and_toggle_daily").show();
+
+	$('#guesses').empty();
+    }
+
+    reset();
+}
+
+show_about_splash = () => {
     $('#about_splash').show();
 }
 
-function hide_about_splash() {
+hide_about_splash = () => {
     $('#about_splash').hide();
     $('#guess').focus();
 }
 
-function show_splash() {
+show_splash = () => {
     $('#splash').show();
 }
 
-function hide_splash() {
+hide_splash = () => {
     $('#splash').hide();
     $('#guess').focus();
 }
 
 // cryptographic hash:
-function cyrb128(str) {
+cyrb128 = (str) => {
     let h1 = 1779033703, h2 = 3144134277,
         h3 = 1013904242, h4 = 2773480762;
     for (let i = 0, k; i < str.length; i++) {
@@ -36,70 +66,114 @@ function cyrb128(str) {
     return [(h1^h2^h3^h4)>>>0, (h2^h1)>>>0, (h3^h1)>>>0, (h4^h1)>>>0];
 }
 
-// start a new game:
-function reset() {
-    // secret word:
-    // exclude first and last words in the dictionary to avoid
-    // edge case with left and right bounds:
-    if (window.mode == 'daily') {
-	var today = new Date();
-	var today_str = today.toDateString();
+// rejoin an existing daily game:
+restore_if_game_in_progress = () => {
+    if (String(localStorage.data_daily_game_json) != 'undefined') {
+	window.data_daily_game = JSON.parse(localStorage.data_daily_game_json);
 
-	// pad a few times to make known prefix, etc. attacks more challenging:
-	for (var i=0; i<10; ++i)
-	    today_str += today_str;
-
-	// TODO: append last S&P closing stock price to prevent future lookup
-	
-	var seeds = cyrb128(today_str);
-	// primes:
-	var i = (seeds[0]*2 + seeds[1]*3 + seeds[2]*5 + seeds[3]*5) % 100003679;
-
-	// exclude first and last words in the dictionary to avoid
-	// edge case with left and right bounds:
-	var x = window.words[ i % (window.words.length-1) + 1 ];
+	if (window.data_daily_game.date == new Date().toDateString()) {
+	    // add the guesses to the page:
+	    window.data_daily_game.guesses.forEach((g)=>{
+		var dist_leven = partial_levenshtein(g);
+		add_guess_to_page(g, dist_leven);
+		if (dist_leven == 0)
+		    winner(g);
+	    });
+	}
+	else
+	    // saved game is from a different date:
+	    new_game_state();
     }
-    else {
-	// infinite version:
-	// window.mode == 'infinite'
-	var x = window.words[ Math.floor(Math.random()*(window.words.length-2))+1 ];
-    }
+    else
+	// no saved game to restore:
+	new_game_state();
+}
 
-    window.guesses = [];
+save_game_if_mode_is_daily = () => {
+    if (window.mode == 'daily')
+	localStorage.data_daily_game_json = JSON.stringify(window.data_daily_game);
+}
 
-    window.left = words[0];
-    window.right = words[words.length-1];
-    $('#left').text(window.left);
-    $('#right').text(window.right);
+new_game_state = () => {
+    window.data_daily_game = {"guesses":[],
+			      "left":words[0],
+			      "right":words[words.length-1],
+			      "date":new Date().toDateString()
+			     }
 
     $('#guesses').empty();
 
-    $('#guess').val('');
+    window.data_daily_game.n_hints = 0;
+    window.data_daily_game.n_guesses_unique = 0;
+
+    save_game_if_mode_is_daily();
+}
+
+// start a new game or restore existing (if mode is daily and game is in progress):
+reset = () => {
+    var today_str = new Date().toDateString();
+
+    if (window.mode == 'daily')
+	$('#date_today').text(today_str.toUpperCase());
+
+    // choose x, the secret word:
+
+    // exclude first and last words in the dictionary to avoid
+    // edge case with left and right bounds.
+
+    if (window.mode == 'daily') {
+	// pad a few times to make known prefix, etc. attacks more challenging:
+	var today_str_extended = today_str;
+	for (var i=0; i<10; ++i)
+	    today_str_extended = today_str_extended + today_str_extended;
+
+	// TODO: salt by appending to last S&P closing stock price to prevent future lookup ;)
+	
+	var seeds = cyrb128(today_str);
+	// primes, where 100003679 exceeds dictionary size:
+	var i = (seeds[0]*2 + seeds[1]*3 + seeds[2]*5 + seeds[3]*5) % 100003679;
+
+	var x = window.words[ i % (window.words.length-1) + 1 ];
+    }
+    else
+	// infinite version:
+	// window.mode == 'infinite'
+	var x = window.words[ Math.floor(Math.random()*(window.words.length-2))+1 ];
 
     // hide x instead of using window.x:
-    partial_lt_x = function(g) {
+    partial_lt_x = (g) => {
 	return g < x;
     };
 
-    partial_levenshtein = function(g) {
+    partial_levenshtein = (g) => {
 	return levenshtein(g, x);
     };
     
-    window.n_hints = 0;
-    window.n_guesses = 0;
+    if (window.mode == 'daily')
+	restore_if_game_in_progress();
+    else
+	new_game_state();
+
+    // set cookie to today:
+    document.cookie = today_str;
+
+    $('#left').text(window.data_daily_game.left);
+    $('#right').text(window.data_daily_game.right);
+
+    $('#guess').val('');
 
     $('#guess').focus();
 }
 
 // allow enter key to submit:
-$("#guess").keypress(function(e) {
+$("#guess").keypress((e) => {
     // if the key pressed is the enter key
     if (e.which == 13) {
 	submit();
     }
 });
 
-function levenshtein(a, b) {
+levenshtein = (a, b) => {
     var t = [], u, i, j, m = a.length, n = b.length;
     if (!m) { return n; }
     if (!n) { return m; }
@@ -111,12 +185,12 @@ function levenshtein(a, b) {
     } return u[n];
 }
 
-function hint() {
-    window.n_hints++;
+hint = () => {
+    window.data_daily_game.n_hints++;
     
     // binary search unnecessary for <100k compared to animations of submit():
-    ind_left = window.words.indexOf(window.left);
-    ind_right = window.words.indexOf(window.right);
+    ind_left = window.words.indexOf(window.data_daily_game.left);
+    ind_right = window.words.indexOf(window.data_daily_game.right);
     
     // exclude left and right (so -2 and shift range by +1):
     g = window.words[ ind_left + Math.floor(Math.random() * (ind_right-ind_left-2)) + 1 ];
@@ -125,7 +199,7 @@ function hint() {
     submit();
 }
 
-function is_superset(set, subset) {
+is_superset = (set, subset) => {
     for (const elem of subset) {
 	if (!set.has(elem)) {
 	    return false;
@@ -134,18 +208,30 @@ function is_superset(set, subset) {
     return true;
 }
 
-function winner() {
-    $('#hint').prop('disabled',true);
+winner = (guess) => {
+    // when playing daily, disable new entries into guess text box:
+    if (window.mode == 'daily') {
+	$('#guess').prop('disabled', true);
+	$('#guess').val('');
+    }
+    
+    $('#button_submit').prop('disabled',true);
+    $('#button_hint').prop('disabled',true);
 
-    $('#score').text('Found "' + $('#guess').val() + '" in ' + window.n_guesses + ' tries & ' + window.n_hints + ' hints')
+    $('#score').text('Found "' + guess + '" in ' + window.data_daily_game.n_guesses_unique + ' tries & ' + window.data_daily_game.n_hints + ' hints')
+
+    // record mode before animation, in case user switches modes
+    // during animation:
+    var mode = window.mode;
 
     $('#dixsee').animate({
 	'color':'#0f0'
-    }, 2000, complete=function(){
+    }, 2000, complete=()=>{
 	$('#dixsee').animate({
 	    'color':'#000'
-	}, 1000, complete=function() {
-	    if (window.mode == 'infinite')
+	}, 1000, complete=()=>{
+	    if (mode == 'infinite')
+		// start a new game:
 		reset();
 	});
     });
@@ -153,13 +239,17 @@ function winner() {
     setTimeout('$("#hint").removeAttr("disabled")', 3000);
 }
 
-function add_guess(g) {
+add_guess_to_game_data_and_page = (g, dist_leven) => {
     // add to count if new guess:
-    if (! new Set(window.guesses).has(g) )
-	window.n_guesses++;
+    if (! new Set(window.data_daily_game.guesses).has(g) )
+	window.data_daily_game.n_guesses_unique++;
     // add submission to list, regardless:
-    window.guesses.push(g);
+    window.data_daily_game.guesses.push(g);
 
+    add_guess_to_page(g, dist_leven);
+}
+
+add_guess_to_page = (g, dist_leven) => {
     var color;
     if (dist_leven == 0)
 	color = '#0f0';
@@ -189,31 +279,31 @@ function add_guess(g) {
 	'<div class="row result" style="color:'+color+'; font-weight:' + weight + '"><div class="two columns value-prop"></div><div class="four columns value-prop"><p>'+ dist_leven +'</p></div><div class="six columns value-prop"><p>' + g + '</p></div></div>');
 }    
 
-function submit() {
+submit = () => {
     var g = $('#guess').val().toLowerCase();
-    dist_leven = partial_levenshtein(g)
+    var dist_leven = partial_levenshtein(g)
 
     if (dist_leven == 0) {
-	add_guess(g);
+	add_guess_to_game_data_and_page(g, dist_leven);
 
-	winner();
+	winner( $('#guess').val() );
     }
     else {
 	if (window.words_set.has(g)) {
-	    if (g > window.left && g < window.right) {
+	    if (g > window.data_daily_game.left && g < window.data_daily_game.right) {
 		// guess splits range:
 		if (partial_lt_x(g)) {
-		    window.left = g;
-		    $('#left').text(window.left);
+		    window.data_daily_game.left = g;
+		    $('#left').text(window.data_daily_game.left);
 		}
 		else {
 		    // g > x:
-		    window.right = g;
-		    $('#right').text(window.right);
+		    window.data_daily_game.right = g;
+		    $('#right').text(window.data_daily_game.right);
 		}
 	    }
 
-	    add_guess(g);
+	    add_guess_to_game_data_and_page(g, dist_leven);
 
 	    // clear guess:
 	    $('#guess').val('');
@@ -222,7 +312,7 @@ function submit() {
 	    // not a valid word:
 	    $('#guess').animate({
 		'background-color':'#f00'
-	    }, 250, complete=function(){
+	    }, 250, complete=()=>{
 		$('#guess').animate({
 		    'background-color':'#fff'
 		}, 10);
@@ -232,12 +322,14 @@ function submit() {
 
     // restore focus to #guess after mouse click for submission/hint:
     $('#guess').focus();
+
+    save_game_if_mode_is_daily();
 }
 
 // download the dictionary and start the game.
 // NOTE: doesn't work locally; for that, use raw link to github file american-english.
-fetch('./media/american-english')
-//fetch('https://raw.githubusercontent.com/dixsee/dixsee.github.io/main/media/american-english')
+//fetch('./media/american-english')
+fetch('https://raw.githubusercontent.com/dixsee/dixsee.github.io/main/media/american-english')
     .then(response => response.text())
     .then((words_file) => {
 	// clean out punctuation, etc.:
@@ -248,10 +340,10 @@ fetch('./media/american-english')
 	window.words = words;
 	window.words_set = new Set(words);
 
-	reset();
-
-	if (document.cookie == '') {
+	if (document.cookie == '')
+	    // new visitor; show splash screen with directions:
+	    // cookie will be set in reset()
 	    $('#splash').show();
-	    document.cookie = 'visited';
-	}
+
+	reset();
     });

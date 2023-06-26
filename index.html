@@ -153,8 +153,9 @@
 ██║  ██║██║ ██╔██╗ ╚════██║██╔══╝  ██╔══╝  ╚═╝
 ██████╔╝██║██╔╝ ██╗███████║███████╗███████╗██╗
 ╚═════╝ ╚═╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝</pre>
-	      <p id="score" style="margin:0;">&nbsp;</p>
-	      <p>DAILY PUZZLE <a href="./infinite.html" style='color:black;'>SWITCH TO DIXSEE INFINITE!</a></p>
+	      <p id="score" style="margin:0;"></p>
+	      <p id="subtitle_and_toggle_daily">DAILY PUZZLE <span id="date_today"></span> <a href="#" style='color:black;' onclick='toggle_mode();'>SWITCH TO DIXSEE INFINITE!</a></p>
+	      <p id="subtitle_and_toggle_infinite" style='display:none;'>INFINITE PLAY <a href="#" style='color:black;' onclick='toggle_mode();'>SWITCH TO DAILY DIXSEE</a></p>
 
 	    </div>
 	  </div>
@@ -178,10 +179,10 @@
 	    </div>
 
 	    <div class="three columns value-prop">
-	      <button onclick="submit()">Submit</button>
+	      <button id="button_submit" onclick="submit()">Submit</button>
 	    </div>
 	    <div class="one columns value-prop">
-	      <button id="hint" onclick="hint()">?</button>
+	      <button id="button_hint" onclick="hint()">?</button>
 	    </div>
 
 	  </div>
@@ -221,10 +222,6 @@
   </body>
   
   <!--Scripts-->
-  <script type="text/javascript">
-    window.mode = 'daily';
-  </script>
-
   <script type="text/javascript" src="js/dixsee.js"></script>
 
 </html>
