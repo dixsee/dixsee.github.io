@@ -1,3 +1,6 @@
+// GNU Free Documentation License 1.3 due to use of Rosetta Code's
+// Levenshtein distance implementation (others could be used instead)
+
 window.mode = 'daily';
 alphabet_set = new Set('abcdefghijklmnopqrstuvwxyz')
 
@@ -48,7 +51,8 @@ hide_splash = () => {
     $('#guess').focus();
 }
 
-// cryptographic hash:
+// cryptographic hash via
+// https://stackoverflow.com/questions/521295/seeding-the-random-number-generator-in-javascript
 cyrb128 = (str) => {
     let h1 = 1779033703, h2 = 3144134277,
         h3 = 1013904242, h4 = 2773480762;
@@ -173,6 +177,8 @@ $("#guess").keypress((e) => {
     }
 });
 
+// levenshtein distance via
+// https://rosettacode.org/wiki/Levenshtein_distance#JavaScript
 levenshtein = (a, b) => {
     var t = [], u, i, j, m = a.length, n = b.length;
     if (!m) { return n; }
