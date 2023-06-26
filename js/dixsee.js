@@ -362,8 +362,8 @@ copy_score_to_clipboard = () => {
 
 // download the dictionary and start the game.
 // NOTE: doesn't work locally; for that, use raw link to github file american-english.
-//fetch('./media/american-english')
-fetch('https://raw.githubusercontent.com/dixsee/dixsee.github.io/main/media/american-english')
+fetch('./media/american-english')
+//fetch('https://raw.githubusercontent.com/dixsee/dixsee.github.io/main/media/american-english')
     .then(response => response.text())
     .then((words_file) => {
 	// clean out punctuation, etc.:
