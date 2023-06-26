@@ -316,6 +316,13 @@ h2 {
     opacity:0.9;
 }
 
+#copy_splash {
+    display:none;
+    position:absolute; top:15rem; left:0; width:100%;
+    background:#333; color:white; border-radius:15px; padding:20px;
+    opacity:0.9;
+}
+
 .gray-background {
   padding-top:2px;
   padding-bottom:2px;

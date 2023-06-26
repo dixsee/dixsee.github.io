@@ -354,12 +354,16 @@ copy_score_to_clipboard = () => {
     var text_to_copy = logo + '\n' + puzzle_id + '\n' + score;
 
     navigator.clipboard.writeText(text_to_copy);
+
+    $('#copy_splash').show(0, complete=()=>{
+	$('#copy_splash').hide(1000);
+    });
 }
 
 // download the dictionary and start the game.
 // NOTE: doesn't work locally; for that, use raw link to github file american-english.
-fetch('./media/american-english')
-//fetch('https://raw.githubusercontent.com/dixsee/dixsee.github.io/main/media/american-english')
+//fetch('./media/american-english')
+fetch('https://raw.githubusercontent.com/dixsee/dixsee.github.io/main/media/american-english')
     .then(response => response.text())
     .then((words_file) => {
 	// clean out punctuation, etc.:
