@@ -6,6 +6,8 @@ $("#subtitle_and_toggle_infinite").hide();
 $('#button_copy').hide();
 alphabet_set = new Set('abcdefghijklmnopqrstuvwxyz')
 
+$('#button_copy').prop('title','COPY RESULTS TO CLIPBOARD');
+
 toggle_mode = () => {
     if (window.mode == 'daily') {
 	// change to infinite mode:
