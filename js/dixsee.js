@@ -344,14 +344,14 @@ submit = () => {
 }
 
 copy_score_to_clipboard = () => {
-    var logo = $('#dixsee').text();
+    var name_game = 'DIXSEE!'
     // remove secret word:
     var puzzle_id = $('#subtitles_and_toggles').children(":visible").text().replace(/ SWITCH TO.*/, '');
     var score = $('#score').text();
     if (window.mode == 'daily')
 	// hide secret word for sharing:
 	score = score.replace(/\".*\"/,'SECRET_WORD')
-    var text_to_copy = logo + '\n' + puzzle_id + '\n' + score;
+    var text_to_copy = name_game + '\n' + puzzle_id + '\n' + score;
 
     navigator.clipboard.writeText(text_to_copy);
 
