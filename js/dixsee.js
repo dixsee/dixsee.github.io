@@ -20,9 +20,7 @@ toggle_mode = () => {
 	$('#button_submit').prop('disabled', false);
 	$('#button_hint').prop('disabled', false);
 
-	$('#score').text('');
-
-	$('#button_copy').hide();
+	$('#guess').prop('placeholder', 'Guess!');
     }
     else {
 	// window.mode == 'infinite'
@@ -33,9 +31,10 @@ toggle_mode = () => {
 	$("#subtitle_and_toggle_daily").show();
 
 	$('#guesses').empty();
-
-	$('#button_copy').hide();
     }
+
+    $('#button_copy').hide();
+    $('#score').text('');
 
     reset();
 }
@@ -226,6 +225,7 @@ winner = (guess) => {
     if (window.mode == 'daily') {
 	$('#guess').prop('disabled', true);
 	$('#guess').val('');
+	$('#guess').prop('placeholder', 'See you tomorrow!');
     }
     
     $('#button_submit').prop('disabled',true);
