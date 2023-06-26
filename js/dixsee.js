@@ -2,6 +2,7 @@
 // Levenshtein distance implementation (others could be used instead)
 
 window.mode = 'daily';
+$("#subtitle_and_toggle_infinite").hide();
 alphabet_set = new Set('abcdefghijklmnopqrstuvwxyz')
 
 toggle_mode = () => {
@@ -17,7 +18,9 @@ toggle_mode = () => {
 	$('#button_hint').prop('disabled', false);
 
 	$('#score').text('');
-	
+
+
+	$('#button_copy').hide();
     }
     else {
 	// window.mode == 'infinite'
@@ -243,6 +246,7 @@ winner = (guess) => {
     });
 
     setTimeout('$("#hint").removeAttr("disabled")', 3000);
+    $('#button_copy').show();
 }
 
 add_guess_to_game_data_and_page = (g, dist_leven) => {
@@ -330,6 +334,19 @@ submit = () => {
     $('#guess').focus();
 
     save_game_if_mode_is_daily();
+}
+
+copy_score_to_clipboard = () => {
+    var logo = $('#dixsee').text();
+    // remove secret word:
+    var puzzle_id = $('#subtitles_and_toggles').children(":visible").text().replace(/ SWITCH TO.*/, '');
+    var score = $('#score').text();
+    if (window.mode == 'daily')
+	// hide secret word for sharing:
+	score = score.replace(/\".*\"/,'SECRET_WORD')
+    var text_to_copy = logo + '\n' + puzzle_id + '\n' + score;
+
+    navigator.clipboard.writeText(text_to_copy);
 }
 
 // download the dictionary and start the game.
