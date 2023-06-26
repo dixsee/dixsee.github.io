@@ -33,6 +33,8 @@ toggle_mode = () => {
 	$("#subtitle_and_toggle_daily").show();
 
 	$('#guesses').empty();
+
+	$('#button_copy').hide();
     }
 
     reset();
