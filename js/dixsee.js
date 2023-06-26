@@ -249,7 +249,10 @@ winner = (guess) => {
 	});
     });
 
-    setTimeout('$("#hint").removeAttr("disabled")', 3000);
+    if (mode == 'infinite') {
+	setTimeout('$("#button_submit").removeAttr("disabled")', 3000);
+	setTimeout('$("#button_hint").removeAttr("disabled")', 3000);
+    }
     $('#button_copy').show();
 }
 
