@@ -8,8 +8,12 @@ alphabet_set = new Set('abcdefghijklmnopqrstuvwxyz')
 
 $('#button_copy').prop('title','COPY RESULTS TO CLIPBOARD');
 
+set_letter_count = () => {
+    $("#guess_letter_count").text($('#guess').val().length);
+}
+
 $('#guess').keyup( () => {
-  $("#guess_letter_count").text($('#guess').val().length)
+    set_letter_count();
 });
 
 toggle_mode = () => {
@@ -175,6 +179,7 @@ reset = () => {
     $('#right').text(window.data_daily_game.right);
 
     $('#guess').val('');
+    set_letter_count();
 
     $('#guess').focus();
 }
@@ -229,6 +234,7 @@ winner = (guess) => {
     if (window.mode == 'daily') {
 	$('#guess').prop('disabled', true);
 	$('#guess').val('');
+	set_letter_count();
 	$('#guess').prop('placeholder', 'See you tomorrow!');
     }
     
@@ -308,7 +314,6 @@ submit = () => {
 
     if (dist_leven == 0) {
 	add_guess_to_game_data_and_page(g, dist_leven);
-
 	winner( $('#guess').val() );
     }
     else {
@@ -330,6 +335,7 @@ submit = () => {
 
 	    // clear guess:
 	    $('#guess').val('');
+	    set_letter_count();
 	}
 	else {
 	    // not a valid word:
