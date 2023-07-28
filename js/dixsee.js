@@ -8,6 +8,10 @@ alphabet_set = new Set('abcdefghijklmnopqrstuvwxyz')
 
 $('#button_copy').prop('title','COPY RESULTS TO CLIPBOARD');
 
+$('#guess').keyup( () => {
+  $("#guess_letter_count").text($('#guess').val().length)
+});
+
 toggle_mode = () => {
     if (window.mode == 'daily') {
 	// change to infinite mode:
