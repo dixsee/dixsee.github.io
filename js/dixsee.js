@@ -293,7 +293,9 @@ add_guess_to_page = (g, dist_leven) => {
 	weight = 'normal';
 
     $('#guesses').prepend(
-	'<div class="row result" style="color:'+color+'; font-weight:' + weight + '"><div class="two columns value-prop"></div><div class="four columns value-prop"><p>'+ dist_leven +'</p></div><div class="six columns value-prop"><p>' + g + '</p></div></div>');
+	'<div class="row result" style="color:'+color+'; font-weight:' + weight + '"><div class="two columns value-prop"></div><div class="four columns value-prop"><p>'+ dist_leven +'</p></div><div class="six columns value-prop"><p class="existing_guess">' + g + '</p></div></div>');
+    var guess_new = $('.existing_guess').first();
+    guess_new.prop('title', String(g.length)+' letters');
 }    
 
 submit = () => {
