@@ -12,9 +12,16 @@ set_letter_count = () => {
     $("#guess_letter_count").text($('#guess').val().length);
 }
 
-$('#guess').keyup( () => {
+$('#guess').on('input', () => {
+    // remove any forbidden characters:
+    $("#guess").val( $("#guess").val().replace(/[^a-zA-Z]/g, '') )
     set_letter_count();
 });
+
+clear_guess = () => {
+    $('#guess').val('');
+    set_letter_count();
+};
 
 toggle_mode = () => {
     if (window.mode == 'daily') {
@@ -178,8 +185,7 @@ reset = () => {
     $('#left').text(window.data_daily_game.left);
     $('#right').text(window.data_daily_game.right);
 
-    $('#guess').val('');
-    set_letter_count();
+    clear_guess();
 
     $('#guess').focus();
 }
@@ -233,8 +239,7 @@ winner = (guess) => {
     // when playing daily, disable new entries into guess text box:
     if (window.mode == 'daily') {
 	$('#guess').prop('disabled', true);
-	$('#guess').val('');
-	set_letter_count();
+	clear_guess();
 	$('#guess').prop('placeholder', 'See you tomorrow!');
     }
     
@@ -333,9 +338,7 @@ submit = () => {
 
 	    add_guess_to_game_data_and_page(g, dist_leven);
 
-	    // clear guess:
-	    $('#guess').val('');
-	    set_letter_count();
+	    clear_guess();
 	}
 	else {
 	    // not a valid word:
@@ -374,8 +377,8 @@ copy_score_to_clipboard = () => {
 
 // download the dictionary and start the game.
 // NOTE: doesn't work locally; for that, use raw link to github file american-english.
-fetch('./media/american-english')
-//fetch('https://raw.githubusercontent.com/dixsee/dixsee.github.io/main/media/american-english')
+//fetch('./media/american-english')
+fetch('https://raw.githubusercontent.com/dixsee/dixsee.github.io/main/media/american-english')
     .then(response => response.text())
     .then((words_file) => {
 	// clean out punctuation, etc.:
