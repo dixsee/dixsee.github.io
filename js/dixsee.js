@@ -153,7 +153,7 @@ reset = () => {
 	    today_str_extended = today_str_extended + today_str_extended;
 
 	// TODO: salt by appending to last S&P closing stock price to prevent future lookup ;)
-	
+
 	var seeds = cyrb128(today_str);
 	// primes, where 100003679 exceeds dictionary size:
 	var i = (seeds[0]*2 + seeds[1]*3 + seeds[2]*5 + seeds[3]*5) % 100003679;
@@ -179,7 +179,7 @@ reset = () => {
     else
 	new_game_state();
 
-    // set cookie to today:
+    // set last visit to today:
     document.cookie = today_str;
 
     $('#left').text(window.data_daily_game.left);
@@ -361,7 +361,7 @@ submit = () => {
 copy_score_to_clipboard = () => {
     var name_game = 'DIXSEE!'
     // remove secret word:
-    var puzzle_id = $('#subtitles_and_toggles').children(":visible").text().replace(/ SWITCH TO.*/, '');
+    var puzzle_id = $('#subtitles_and_toggles').children(":visible").text().replace(/\nSWITCH TO.*/, '');
     var score = $('#score').text();
     if (window.mode == 'daily')
 	// hide secret word for sharing:

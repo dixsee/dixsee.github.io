@@ -66,7 +66,7 @@
 
 	      <h5>Using distance, you can do cool things:</h5>
 	      <p>If the word is between "illness" and "illumined",
-	      then it must start "ill...". If guess ill has distance
+	      then it must start "ill...". If guess "ill" has distance
 	      6, then the word must be 9 letters long. Or if the short
 	      guess "i" has distance 8 and "a" has distance 9, then
 	      the word must contain "i", not contain "a", and has
@@ -109,7 +109,7 @@
 	      <p>What started out as a quick project for my wife became a game that we play regularly. We'd love to share it with you!</p>
 
 	      <p style="text-align:center;"><img src="images/large-atom.png"
-		style="width:25%;"><br>My name is Oliver. My lovely wife drew this atom for me!</p>
+		style="width:15%;"><br>My name is Oliver. My lovely wife drew this atom for me!</p>
 	      <h5 style='margin-top:20px; text-align:center;'>(click me to dismiss)</h5>
 	    </div>
 	  </div>
@@ -126,33 +126,6 @@
 
 	<div id="page">
 	  <br>
-	  <div id="share" class="row">
-	    <!-- facebook: -->
-	    <div class="two columns value-prop">
-	      <!-- Load Facebook SDK for JavaScript -->
-	      <div id="fb-root"></div>
-	      <script>(function(d, s, id) {
-		var js, fjs = d.getElementsByTagName(s)[0];
-		if (d.getElementById(id)) return;
-		js = d.createElement(s); js.id = id;
-		js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
-		fjs.parentNode.insertBefore(js, fjs);
-		}(document, 'script', 'facebook-jssdk'));</script>
-
-	      <!-- Your share button code -->
-	      <div class="fb-share-button"
-		   data-href="https://dixsee.github.io"
-		   data-layout="button_count">
-	      </div>
-	    </div>
-
-	    <!-- twitter: -->
-	    <!-- pad by 4px to match whitespace on facebook: -->
-	    <div class="two columns value-prop" style="padding-top:4px;">
-	      <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text="Play #DIXSEE with me!" data-url="https://dixsee.github.io" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-	    </div>
-	    
-	  </div>
 	  <div id="row_dixsee" class="row">
 	    <div class="twelve columns value-prop">
 <p style="margin:0;">----------------------------------------------</p>
@@ -164,19 +137,25 @@
 ██████╔╝██║██╔╝ ██╗███████║███████╗███████╗██╗
 ╚═════╝ ╚═╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝</pre>
 <div id="subtitles_and_toggles">
-<p id="subtitle_and_toggle_daily" style="margin:0;">DAILY PUZZLE <span id="date_today"></span> <a href="#" style='color:black;' onclick='toggle_mode();'>SWITCH TO DIXSEE INFINITE!</a></p>
-<p id="subtitle_and_toggle_infinite" style="margin:0;">INFINITE PLAY <a href="#" style='color:black;' onclick='toggle_mode();'>SWITCH TO DAILY DIXSEE</a></p>
+<p id="subtitle_and_toggle_daily" style="margin:0;">DAILY PUZZLE <span id="date_today"></span> <a href="#" style='color:black;' onclick='toggle_mode();'><br>SWITCH TO INFINITE!</a></p>
+<p id="subtitle_and_toggle_infinite" style="margin:0;">INFINITE PLAY<br><a href="#" style='color:black;' onclick='toggle_mode();'>SWITCH TO DAILY!</a></p>
 </div>
 <p style="margin:0;"><span id="score"></span> <button id="button_copy" onclick='copy_score_to_clipboard()' style="margin:0; padding:5px;">✂️📋</button></p>
 </div>
 </div>
 
 	  <div class="row">
-	    <div class="four columns value-prop"></div>
+	    <div class="two columns value-prop"></div>
 
-	    <div class="seven columns value-prop" style="text-align:center;">
+	    <div class="ten columns value-prop" style="text-align:center;">
 	      <!-- the symbol is an open book: -->
-	      <h4><span id="left"></span> &lt; 📖 &lt; <span id="right"></span></h4>
+	      <h4>
+		<table id='left_and_book_and_right'>
+		  <tr>
+		    <td><span id="left"></span> &lt; <td><div id='book'> <td>&lt; <span id="right"></span>
+		  </tr>
+		</table>
+	      </h4>
 	      <br>
 	    </div>
 	  </div>

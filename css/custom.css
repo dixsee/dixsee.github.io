@@ -87,7 +87,7 @@
 /* Small phone */
 @media (max-width: 549px) {
   .asciiart {
-    font-size:0.3em;
+    font-size:0.35em;
   }
   #nav {
       font-size:1rem;
@@ -124,7 +124,7 @@
     max-height: none; }
 
   .asciiart {
-    font-size:0.5em;
+    font-size:0.45em;
   }
   #nav {
       font-size:1.4rem;
@@ -251,7 +251,7 @@
     border-bottom-color: #33C3F0; }
 
   .asciiart {
-    font-size:0.7em;
+    font-size:0.65em;
   }
   #nav {
       font-size:1.8rem;
@@ -266,6 +266,20 @@
 h2 {
     line-height:1;
     letter-spacing:-0.3rem;
+}
+
+#book {
+    margin-top:2pt;
+    height:28pt;
+    width:28pt;
+    background-size:100%;
+    background-image:url('../images/faveicon.ico');
+}
+
+#left_and_book_and_right {
+    margin-bottom:0;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .asciiart {
