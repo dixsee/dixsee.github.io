@@ -361,7 +361,7 @@ submit = () => {
 copy_score_to_clipboard = () => {
     var name_game = 'DIXSEE!'
     // remove secret word:
-    var puzzle_id = $('#subtitles_and_toggles').children(":visible").text().replace(/\nSWITCH TO.*/, '');
+    var puzzle_id = $('#subtitles_and_toggles').children(":visible").text().replace(/SWITCH TO.*/, '');
     var score = $('#score').text();
     if (window.mode == 'daily')
 	// hide secret word for sharing:
@@ -377,8 +377,8 @@ copy_score_to_clipboard = () => {
 
 // download the dictionary and start the game.
 // NOTE: doesn't work locally; for that, use raw link to github file american-english.
-fetch('./media/american-english')
-//fetch('https://raw.githubusercontent.com/dixsee/dixsee.github.io/main/media/american-english')
+//fetch('./media/american-english')
+fetch('https://raw.githubusercontent.com/dixsee/dixsee.github.io/main/media/american-english')
     .then(response => response.text())
     .then((words_file) => {
 	// clean out punctuation, etc.:
